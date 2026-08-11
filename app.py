@@ -18,7 +18,7 @@ if _env_path.exists():
 
 import chainlit as cl
 
-from auth.users import authenticate_user, create_first_user_if_needed
+from auth.users import authenticate_user, register_user, create_first_user_if_needed
 from agent.data_layer import SQLiteDataLayer
 from agent.engine import run_turn, generate_report
 from agent.security import check_rate_limit, validate_message
@@ -43,10 +43,27 @@ create_first_user_if_needed()
 
 @cl.password_auth_callback
 def auth_callback(email: str, password: str) -> cl.User | None:
-    """Autenticação por email/senha contra SQLite."""
+    """Autenticação por email/senha. Registra automaticamente novos usuários."""
+    user = authenticate_user(email, password)
+    if user is not None:
+        return cl.User(
+            identifier=user["id"],
+            metadata={"email": user["email"], "name": user["name"]},
+        )
+
+    # Email não existe — registra automaticamente
+    if len(password) < 6:
+        return None  # Senha muito curta
+
+    ok, msg = register_user(email, password, name=email.split("@")[0])
+    if not ok:
+        return None
+
+    # Autentica o usuário recém-criado
     user = authenticate_user(email, password)
     if user is None:
         return None
+
     return cl.User(
         identifier=user["id"],
         metadata={"email": user["email"], "name": user["name"]},
