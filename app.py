@@ -22,10 +22,6 @@ if not os.environ.get("CHAINLIT_AUTH_SECRET"):
     secret = hashlib.sha256(os.urandom(64)).hexdigest()
     os.environ["CHAINLIT_AUTH_SECRET"] = secret
 
-# Debug: verificar DEEPSEEK_API_KEY
-_dsk = os.environ.get("DEEPSEEK_API_KEY", "")
-print(f"DEEPSEEK_API_KEY: presente={'SIM' if _dsk else 'NAO'}, tamanho={len(_dsk)}, prefixo={_dsk[:8] if _dsk else 'N/A'}", flush=True)
-
 import chainlit as cl
 
 from auth.users import authenticate_user, register_user, create_first_user_if_needed
