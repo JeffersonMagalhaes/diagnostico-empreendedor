@@ -6,9 +6,10 @@ if [ -z "$DEEPSEEK_API_KEY" ]; then
     exit 1
 fi
 
-export DATA_DIR="${DATA_DIR:-/data}"
+# Usa DATA_DIR se definido, senao ./data (funciona sem volume)
+export DATA_DIR="${DATA_DIR:-./data}"
 mkdir -p "$DATA_DIR"
-chmod 777 "$DATA_DIR" 2>/dev/null || true
 
+echo "DATA_DIR=$DATA_DIR"
 echo "Iniciando Chainlit..."
 exec chainlit run app.py --port "${PORT:-8000}" --host 0.0.0.0
