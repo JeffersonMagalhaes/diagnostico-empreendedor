@@ -16,6 +16,12 @@ _env_path = Path(__file__).parent / ".env"
 if _env_path.exists():
     load_dotenv(_env_path)
 
+# Auto-gera CHAINLIT_AUTH_SECRET se nao definido (Railway)
+import hashlib
+if not os.environ.get("CHAINLIT_AUTH_SECRET"):
+    secret = hashlib.sha256(os.urandom(64)).hexdigest()
+    os.environ["CHAINLIT_AUTH_SECRET"] = secret
+
 import chainlit as cl
 
 from auth.users import authenticate_user, register_user, create_first_user_if_needed
