@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "chainlit run app.py --port $PORT --host 0.0.0.0"
+startCommand = "bash start.sh"
 
 [service]
 port = 8000
