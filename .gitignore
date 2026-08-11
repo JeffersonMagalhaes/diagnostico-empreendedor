@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Environment
+.env
+
+# Data (SQLite)
+data/*.db
+
+# Chainlit
+.chainlit/translations/
+.chainlit/logs/
